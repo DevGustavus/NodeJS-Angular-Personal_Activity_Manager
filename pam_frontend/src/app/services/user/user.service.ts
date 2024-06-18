@@ -8,13 +8,19 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class UserService {
-
   private apiUrl: string = `${environment.api}/user`;
 
   constructor(private http: HttpClient) {}
 
   getAllUsers(): Observable<any> {
     return this.http.get(this.apiUrl).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getUserById(id: number): Observable<any> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.get(url).pipe(
       catchError(this.handleError)
     );
   }

@@ -5,14 +5,40 @@ const prisma = new PrismaClient()
 
 async function getAll(req, res) {
     try {
+        const activities = await prisma.activity.findMany({
+            include: {
+                user: true,
+                category: true
+            }
+        });
 
-        const activitys = await prisma.activity.findMany()
+        res.status(httpStatus.OK).send(activities);
+    } catch (err) {
+        console.error(err);
+        res.status(httpStatus.UNPROCESSABLE_ENTITY).send("Erro na requisição");
+    }
+}
 
-        return res.status(httpStatus.OK).send(activitys);
+async function getById(req, res) {
+    try {
+        const activity = await prisma.activity.findUnique({
+            where: {
+                id: parseInt(req.params.id)
+            },
+            include: {
+                user: true,
+                category: true
+            }
+        });
 
+        if (!activity) {
+            return res.status(httpStatus.NOT_FOUND).send("Atividade não encontrada");
+        }
+
+        return res.status(httpStatus.OK).send(activity);
     } catch (err) {
         console.log(err);
-        res.status(httpStatus.UNPROCESSABLE_ENTITY).send("Erro na requisição")
+        res.status(httpStatus.UNPROCESSABLE_ENTITY).send("Erro na requisição");
     }
 }
 
@@ -72,4 +98,4 @@ async function deleteEntity(req, res) {
     }
 }
 
-module.exports = { getAll, create, update, deleteEntity }
+module.exports = { getAll, getById, create, update, deleteEntity }

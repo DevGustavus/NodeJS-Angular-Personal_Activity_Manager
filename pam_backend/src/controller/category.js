@@ -16,6 +16,25 @@ async function getAll(req, res) {
     }
 }
 
+async function getById(req, res) {
+    try {
+        const category = await prisma.category.findUnique({
+            where: {
+                id: parseInt(req.params.id)
+            }
+        });
+
+        if (!category) {
+            return res.status(httpStatus.NOT_FOUND).send("Categoria não encontrada");
+        }
+
+        return res.status(httpStatus.OK).send(category);
+    } catch (err) {
+        console.log(err);
+        res.status(httpStatus.UNPROCESSABLE_ENTITY).send("Erro na requisição");
+    }
+}
+
 async function create(req, res) {
     try {
         const category = await prisma.category.create({
@@ -70,4 +89,4 @@ async function deleteEntity(req, res) {
     }
 }
 
-module.exports = { getAll, create, update, deleteEntity }
+module.exports = { getAll, getById, create, update, deleteEntity }
