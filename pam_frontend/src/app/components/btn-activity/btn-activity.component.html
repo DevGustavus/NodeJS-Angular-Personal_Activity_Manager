@@ -19,11 +19,11 @@
             </div>
             <div class="mb-3">
               <label for="userId" class="form-label">User ID</label>
-              <input type="number" class="form-control" id="userId" placeholder="Enter User ID" name="userId" [(ngModel)]="newActivity.userId" required>
+              <input type="number" class="form-control" id="userId" placeholder="Enter User ID" name="userId" [(ngModel)]="newActivity.user.id" required>
             </div>
             <div class="mb-3">
               <label for="categoryId" class="form-label">Category ID</label>
-              <input type="number" class="form-control" id="categoryId" placeholder="Enter Category ID" name="categoryId" [(ngModel)]="newActivity.categoryId" required>
+              <input type="number" class="form-control" id="categoryId" placeholder="Enter Category ID" name="categoryId" [(ngModel)]="newActivity.category.id" required>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

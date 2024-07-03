@@ -47,6 +47,31 @@
       }
     },
     "/category/{id}": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "description": "Endpoint que retorna uma categoria pelo seu identificador",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          },
+          "404": {
+            "description": "Categoria não encontrada"
+          }
+        }
+      },
       "put": {
         "tags": [
           "Category"
@@ -134,6 +159,31 @@
       }
     },
     "/activity/{id}": {
+      "get": {
+        "tags": [
+          "Activity"
+        ],
+        "description": "Endpoint que retorna uma atividade pelo seu identificador",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Activity"
+            }
+          },
+          "404": {
+            "description": "Activity não encontrada"
+          }
+        }
+      },
       "put": {
         "tags": [
           "Activity"
@@ -218,6 +268,31 @@
       }
     },
     "/user/{id}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint que retorna um user pelo seu identificador",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "User não encontrado"
+          }
+        }
+      },
       "put": {
         "tags": [
           "User"

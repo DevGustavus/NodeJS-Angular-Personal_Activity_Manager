@@ -6,6 +6,6 @@ export interface Activity {
     description: string;
     createdAt?: Date;
     updatedAt?: Date;
-    user?: User; // Relacionamento com User
-    category?: Category; // Relacionamento com Category
+    user: User; // Relacionamento com User
+    category: Category; // Relacionamento com Category
 }

@@ -17,10 +17,10 @@ import { User } from '../../interfaces/user.interface';
 })
 export class BtnActivityComponent {
   
-  newActivity: Partial<Activity> = {
-    description: '',
-    user: undefined, // Inicializa como undefined
-    category: undefined // Inicializa como undefined
+  newActivity: Activity = { 
+    description: '', 
+    user: { id: undefined, firstName: '', lastName: '' },
+    category: { id: undefined, description: '' }
   };
 
   constructor(
@@ -29,35 +29,59 @@ export class BtnActivityComponent {
     private categoryService: CategoryService
   ) {}
 
-  async createActivity(): Promise<void> {
-    if (!this.newActivity.description) {
-      console.error('Description is missing.');
+  createActivity(): void {
+    const userId = this.newActivity.user.id;
+    const categoryId = this.newActivity.category.id;
+
+    if (!userId || !categoryId) {
+      console.error('User ID or Category ID is undefined or null.');
       return;
     }
 
-    try {
-      // Obter o usuário pelo ID
-      const userId = this.newActivity.user?.id;
-      if (userId) {
-        const user: User = await this.userService.getUserById(userId).toPromise();
+    // Obter o usuário pelo ID
+    this.userService.getUserById(userId).subscribe({
+      next: (user: User) => {
         this.newActivity.user = user;
-      }
+        console.log('User:', user);
 
-      // Obter a categoria pelo ID
-      const categoryId = this.newActivity.category?.id;
-      if (categoryId) {
-        const category: Category = await this.categoryService.getCategoryById(categoryId).toPromise();
-        this.newActivity.category = category;
-      }
+        // Obter a categoria pelo ID
+        this.categoryService.getCategoryById(categoryId).subscribe({
+          next: (category: Category) => {
+            this.newActivity.category = category;
+            console.log('Category:', category);
 
-      // Enviar a atividade para o backend
-      await this.activityService.createActivity(this.newActivity as Activity).toPromise();
+            // Montar o objeto JSON no formato esperado pelo backend
+            const activityToSend = {
+              description: this.newActivity.description,
+              userId: userId,
+              categoryId: categoryId
+            };
 
-      console.log('Activity created successfully');
-      this.newActivity = { description: '', user: undefined, category: undefined }; // Limpar o formulário após a criação
-    } catch (error) {
-      console.error('Error creating activity:', error);
-    }
+            console.log('Activity to send:', activityToSend);
+
+            // Enviar a atividade para o backend
+            this.activityService.createActivity(activityToSend).subscribe({
+              next: () => {
+                console.log('Activity created successfully');
+                this.resetForm(); // Limpar o formulário após a criação
+              },
+              error: (error) => console.error('Error creating activity:', error),
+              complete: () => console.log('Activity creation completed')
+            });
+          },
+          error: (error) => console.error('Error fetching category:', error)
+        });
+      },
+      error: (error) => console.error('Error fetching user:', error)
+    });
+  }
+
+  resetForm(): void {
+    this.newActivity = {
+      description: '',
+      user: { id: undefined, firstName: '', lastName: '' },
+      category: { id: undefined, description: '' }
+    };
   }
 
 }
