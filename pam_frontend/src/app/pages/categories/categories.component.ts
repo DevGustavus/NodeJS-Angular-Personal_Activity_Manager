@@ -5,11 +5,14 @@ import { CommonModule } from '@angular/common';
 import { CategoryService } from '../../services/category/category.service';
 import { Category } from '../../interfaces/category.interface';
 import { BtnCategoryComponent } from '../../components/btn-category/btn-category.component';
+import { Subscription } from 'rxjs';
+import { SharedServiceService } from '../../services/sharedService/shared-service.service';
+import { CardCategoryComponent } from '../../components/card-category/card-category.component';
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [HeaderComponent, HttpClientModule, CommonModule],
+  imports: [HeaderComponent, HttpClientModule, CommonModule, CardCategoryComponent],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.css'
 })
@@ -18,11 +21,15 @@ export class CategoriesComponent {
 
   categories: Category[] = [];
   newCategory: Category = { description: '' };
+  private newCategorySubscription?: Subscription;
 
-  constructor(private categoryService: CategoryService) {}
+  constructor(private categoryService: CategoryService, private sharedService: SharedServiceService) {}
 
   ngOnInit(): void {
     this.getAllCategories();
+    this.newCategorySubscription = this.sharedService.newCategoryCreated$.subscribe(() => {
+      this.getAllCategories();
+    });
   }
 
   getAllCategories(): void {
@@ -33,37 +40,4 @@ export class CategoriesComponent {
     });
   }
 
-  createCategory(): void {
-    this.categoryService.createCategory(this.newCategory).subscribe({
-      next: (data) => {
-        this.categories.push(data);
-        this.newCategory = { description: '' }; // Limpa o formulário
-        console.log('Category created successfully:', data);
-      },
-      error: (error) => console.error('Error creating category:', error)
-    });
-  }
-
-  updateCategory(id: number, category: any): void {
-    this.categoryService.updateCategory(id, category).subscribe({
-      next: (data) => {
-        const index = this.categories.findIndex(c => c.id === id);
-        if (index !== -1) {
-          this.categories[index] = data;
-        }
-        console.log('Category updated successfully:', data);
-      },
-      error: (error) => console.error('Error updating category:', error)
-    });
-  }
-
-  deleteCategory(id: number): void {
-    this.categoryService.deleteCategory(id).subscribe({
-      next: () => {
-        this.categories = this.categories.filter(c => c.id !== id);
-        console.log('Category deleted successfully');
-      },
-      error: (error) => console.error('Error deleting category:', error)
-    });
-  }
 }

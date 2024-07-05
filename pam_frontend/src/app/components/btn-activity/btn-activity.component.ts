@@ -7,6 +7,7 @@ import { UserService } from '../../services/user/user.service';
 import { CategoryService } from '../../services/category/category.service';
 import { Category } from '../../interfaces/category.interface';
 import { User } from '../../interfaces/user.interface';
+import { SharedServiceService } from '../../services/sharedService/shared-service.service';
 
 @Component({
   selector: 'app-btn-activity',
@@ -26,7 +27,8 @@ export class BtnActivityComponent {
   constructor(
     private activityService: ActivityService,
     private userService: UserService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private sharedService: SharedServiceService
   ) {}
 
   createActivity(): void {
@@ -64,6 +66,7 @@ export class BtnActivityComponent {
               next: () => {
                 console.log('Activity created successfully');
                 this.resetForm(); // Limpar o formulário após a criação
+                this.sharedService.notifyActivityCreated();
               },
               error: (error) => console.error('Error creating activity:', error),
               complete: () => console.log('Activity creation completed')

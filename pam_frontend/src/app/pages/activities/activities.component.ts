@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { ActivityService } from '../../services/activity/activity.service';
 import { Activity } from '../../interfaces/activity.interface';
 import { BtnActivityComponent } from '../../components/btn-activity/btn-activity.component';
+import { SharedServiceService } from '../../services/sharedService/shared-service.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-activities',
@@ -22,11 +24,15 @@ export class ActivitiesComponent implements OnInit {
     user: { firstName: '', lastName: '' },
     category: { description: '' }
   };
+  private newActivitySubscription?: Subscription;
 
-  constructor(private activityService: ActivityService) {}
+  constructor(private activityService: ActivityService, private sharedService: SharedServiceService) {}
 
   ngOnInit(): void {
     this.getAllActivities();
+    this.newActivitySubscription = this.sharedService.newActivityCreated$.subscribe(() => {
+      this.getAllActivities();
+    });
   }
 
   getAllActivities(): void {
@@ -37,21 +43,6 @@ export class ActivitiesComponent implements OnInit {
       },
       error: (error) => console.error('Error fetching activities:', error),
       complete: () => console.log('Activities fetching completed')
-    });
-  }
-
-  createActivity(): void {
-    this.activityService.createActivity(this.newActivity).subscribe({
-      next: (data) => {
-        this.activities.push(data);
-        this.newActivity = { 
-          description: '', 
-          user: { firstName: '', lastName: '' },
-          category: { description: '' }
-        };
-        console.log('Activity created successfully:', data);
-      },
-      error: (error) => console.error('Error creating activity:', error)
     });
   }
 
