@@ -75,13 +75,13 @@ async function update(req, res) {
 
 async function deleteEntity(req, res) {
     try {
-        const cat = await prisma.category.delete({
+        const category = await prisma.category.delete({
             where: {
                 id: parseInt(req.params.id)
             }
         })
 
-        res.status(httpStatus.OK).send("Categoria removida com sucesso!")
+        res.status(httpStatus.OK).send(category)
 
     } catch (error) {
         console.log(error);

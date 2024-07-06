@@ -23,19 +23,18 @@ export class CardUserComponent {
     this.userService.updateUser(this.user.id!, this.currentUser).subscribe({
       next: (data) => {
         console.log('User updated successfully:', data);
-        console.log('user:', this.user);
       },
-      error: (error) => console.error('Error updating user:', error),
+      error: (error) => console.log('Error updating user:', error),
       complete: () => console.log('User update request completed')
     });
   }
 
   deleteUser(): void {
     this.userService.deleteUser(this.user.id!).subscribe({
-      next: () => {
-        console.log('User deleted successfully');
+      next: (data) => {
+        console.log('User deleted successfully', data);
       },
-      error: (error) => console.error('Error deleting user:', error),
+      error: (error) => console.log('Error deleting user:', error),
       complete: () => console.log('User deletion request completed')
     });
   }

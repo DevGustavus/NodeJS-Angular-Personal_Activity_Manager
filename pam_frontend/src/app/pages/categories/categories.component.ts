@@ -20,8 +20,8 @@ export class CategoriesComponent {
   btnCategory = BtnCategoryComponent;
 
   categories: Category[] = [];
-  newCategory: Category = { description: '' };
   private newCategorySubscription?: Subscription;
+  currentCategory: Category = { description: '' };
 
   constructor(private categoryService: CategoryService, private sharedService: SharedServiceService) {}
 
