@@ -1,0 +1,18 @@
+main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 20px;
+}
+
+main img {
+    width: 500px;
+}
+
+@media (max-width: 550px){
+    main img {
+        width: 100%;
+    }
+}
