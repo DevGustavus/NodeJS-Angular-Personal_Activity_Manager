@@ -12,7 +12,7 @@ async function getAll(req, res) {
             }
         });
 
-        res.status(httpStatus.OK).send(activities);
+        res.status(httpStatus.OK).json(activities);
     } catch (err) {
         console.error(err);
         res.status(httpStatus.UNPROCESSABLE_ENTITY).send("Erro na requisição");
@@ -35,7 +35,7 @@ async function getById(req, res) {
             return res.status(httpStatus.NOT_FOUND).send("Atividade não encontrada");
         }
 
-        return res.status(httpStatus.OK).send(activity);
+        return res.status(httpStatus.OK).json(activity);
     } catch (err) {
         console.log(err);
         res.status(httpStatus.UNPROCESSABLE_ENTITY).send("Erro na requisição");
@@ -52,7 +52,8 @@ async function create(req, res) {
             }
         });
 
-        res.status(httpStatus.CREATED).send(activity);
+        res.status(httpStatus.OK).json(activity);
+
     } catch (error) {
         console.log(error);
         res.status(httpStatus.UNPROCESSABLE_ENTITY).send("Erro na requisição")
@@ -73,7 +74,7 @@ async function update(req, res) {
             }
         })
 
-        res.status(httpStatus.CREATED).send(activity);
+        res.status(httpStatus.OK).json(activity);
 
     } catch (error) {
         console.log(error);
@@ -84,13 +85,13 @@ async function update(req, res) {
 
 async function deleteEntity(req, res) {
     try {
-        const cat = await prisma.activity.delete({
+        const activity = await prisma.activity.delete({
             where: {
                 id: parseInt(req.params.id)
             }
         })
 
-        res.status(httpStatus.OK).send("Atividade removida com sucesso!")
+        res.status(httpStatus.OK).json(activity);
 
     } catch (error) {
         console.log(error);

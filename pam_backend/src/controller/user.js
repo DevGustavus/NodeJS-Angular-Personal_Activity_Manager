@@ -8,7 +8,7 @@ async function getAll(req, res) {
 
         const users = await prisma.user.findMany()
 
-        return res.status(httpStatus.OK).send(users);
+        return res.status(httpStatus.OK).json(users);
 
     } catch (err) {
         console.log(err);
@@ -28,7 +28,8 @@ async function getById(req, res) {
             return res.status(httpStatus.NOT_FOUND).send("Usuário não encontrado");
         }
 
-        return res.status(httpStatus.OK).send(user);
+        return res.status(httpStatus.OK).json(user);
+
     } catch (err) {
         console.log(err);
         res.status(httpStatus.UNPROCESSABLE_ENTITY).send("Erro na requisição");
@@ -44,7 +45,8 @@ async function create(req, res) {
             }
         });
 
-        res.status(httpStatus.CREATED).send(user);
+        res.status(httpStatus.OK).json(user);
+
     } catch (error) {
         console.log(error);
         res.status(httpStatus.UNPROCESSABLE_ENTITY).send("Erro na requisição")
@@ -65,7 +67,7 @@ async function update(req, res) {
             }
         })
 
-        res.status(httpStatus.CREATED).send(user);
+        res.status(httpStatus.OK).json(user);
 
     } catch (error) {
         console.log(error);
@@ -76,13 +78,13 @@ async function update(req, res) {
 
 async function deleteEntity(req, res) {
     try {
-        const cat = await prisma.user.delete({
+        const user = await prisma.user.delete({
             where: {
                 id: parseInt(req.params.id)
             }
         })
 
-        res.status(httpStatus.OK).send("Usuario removido com sucesso!")
+        res.status(httpStatus.OK).json(user);
 
     } catch (error) {
         console.log(error);

@@ -8,7 +8,7 @@ async function getAll(req, res) {
 
         const categories = await prisma.category.findMany()
 
-        return res.status(httpStatus.OK).send(categories);
+        return res.status(httpStatus.OK).json(categories);
 
     } catch (err) {
         console.log(err);
@@ -28,7 +28,8 @@ async function getById(req, res) {
             return res.status(httpStatus.NOT_FOUND).send("Categoria não encontrada");
         }
 
-        return res.status(httpStatus.OK).send(category);
+        return res.status(httpStatus.OK).json(category);
+
     } catch (err) {
         console.log(err);
         res.status(httpStatus.UNPROCESSABLE_ENTITY).send("Erro na requisição");
@@ -43,7 +44,8 @@ async function create(req, res) {
             }
         });
 
-        res.status(httpStatus.CREATED).send(category);
+        res.status(httpStatus.OK).json(category);
+
     } catch (error) {
         console.log(error);
         res.status(httpStatus.UNPROCESSABLE_ENTITY).send("Erro na requisição")
@@ -64,7 +66,7 @@ async function update(req, res) {
             }
         })
 
-        res.status(httpStatus.CREATED).send(category);
+        res.status(httpStatus.OK).json(category);
 
     } catch (error) {
         console.log(error);
@@ -81,7 +83,7 @@ async function deleteEntity(req, res) {
             }
         })
 
-        res.status(httpStatus.OK).send(category)
+        res.status(httpStatus.OK).json(category);
 
     } catch (error) {
         console.log(error);
